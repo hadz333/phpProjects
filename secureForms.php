@@ -1,8 +1,3 @@
-<!-- 
-What is the htmlspecialchars() function?
-The htmlspecialchars() function converts special characters to HTML entities. This means that it will replace HTML characters like < and > with &lt; and &gt;. This prevents attackers from exploiting the code by injecting HTML or Javascript code (Cross-site Scripting attacks) in forms.
--->
-
 <!DOCTYPE HTML>  
 <html>
 <head>
@@ -16,15 +11,18 @@ The htmlspecialchars() function converts special characters to HTML entities. Th
 
 <?php
 // define variables and set to empty values
+// every time page is reloaded or submit button is clicked, these are initially reset
 $name = $email = $gender = $comment = $website = "";
 $nameErr = $emailErr = $genderErr = $websiteErr = "";
 
+// checks to make sure server request used POST method
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // error text only shows up when required field is not entered
   if (empty($_POST["name"])) {
   	$nameErr = "Name is required";
   } else {
   	$name = test_input($_POST["name"]);
+  	// if name isn't valid, set error text (not blank anymore)
 	if (!preg_match("/^[a-zA-Z ]*$/",$name)) {
 	  $nameErr = "Only letters and white space allowed";
 	}
@@ -61,6 +59,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 }
 
+/* 
+What is the htmlspecialchars() function?
+The htmlspecialchars() function converts special characters to HTML entities. This means that it will replace HTML characters like < and > with &lt; and &gt;. This prevents attackers from exploiting the code by injecting HTML or Javascript code (Cross-site Scripting attacks) in forms.
+*/
 function test_input($data) {
   $data = trim($data);
   $data = stripslashes($data);
@@ -71,10 +73,13 @@ function test_input($data) {
 
 <h2>PHP Form Validation Example</h2>
 <h4 class="error">Required fields: *</h4> 
+<!-- $_SERVER["PHP_SELF"] returns your current file name --> 
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
 Name: <input type="text" name="name" value="<?php echo $name;?>">
+<!-- span below will only contain "*" (indicating required field) unless error exists -->
 <span class="error">* <?php echo $nameErr;?></span>
 <br><br>
+<!-- value is set to $_____, which allows data to remain in boxes after submitting -->
 E-mail: <input type="text" name="email" value="<?php echo $email;?>">
 <span class="error">* <?php echo $emailErr;?></span>
 <br><br>
@@ -84,6 +89,7 @@ Website:
 <br><br>
 Comment: <textarea name="comment" rows="5" cols="40"><?php echo $comment;?></textarea>
 <br><br>
+<!-- If gender was previously chosen, set to user's choice (saving data from previous submit) -->
 Gender:
 <input type="radio" name="gender" 
 <?php if (isset($gender) && $gender=="female") echo "checked";?> 
