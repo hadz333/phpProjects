@@ -23,6 +23,7 @@ date_default_timezone_set("America/Los_Angeles");
 echo "Today is " . date("l") . ", " . date("m/d/Y") . "<br>";
 ?>
 <br>
+<!-- Automatically set to current date copyright -->
 © 2010-<?php echo date("Y");?>
 <br>
 
@@ -86,6 +87,11 @@ echo "There are " . $d2 ." days until 4th of July.";
   $txt = "John Doe\n";
   fwrite($myfile, $txt);
   $txt = "Jane Doe\n";
+  fwrite($myfile, $txt);
+  fclose($myfile);
+
+  $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+  $txt = "John Deere";
   fwrite($myfile, $txt);
   fclose($myfile);
 ?>
